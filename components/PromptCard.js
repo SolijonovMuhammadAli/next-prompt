@@ -7,6 +7,11 @@ import Image from "next/image";
 
 function PromptCard({ post, handleTagClick, handleEdit, handleDelete }) {
   const [copied, setCopied] = useState("");
+  const { data: session } = useSession();
+  const pathName = usePathname();
+  const router = useRouter();
+
+  console.log(session);
 
   const handleCopy = () => {
     setCopied(post.prompt);
@@ -18,7 +23,7 @@ function PromptCard({ post, handleTagClick, handleEdit, handleDelete }) {
     <div className="prompt_card">
       <div className="flex justify-between items-start gap-5">
         <div className="flex-1 flex justify-start items-center gap-3 cursor-pointer">
-          <Image
+          <img
             src={post.creator?.image}
             alt="user_image"
             width={40}
@@ -37,7 +42,7 @@ function PromptCard({ post, handleTagClick, handleEdit, handleDelete }) {
         <div className="copy_btn" onClick={handleCopy}>
           <Image
             src={
-              copied === post.prompt
+              copied === post?.prompt
                 ? "/assets/icons/tick.svg"
                 : "/assets/icons/copy.svg"
             }
@@ -53,6 +58,20 @@ function PromptCard({ post, handleTagClick, handleEdit, handleDelete }) {
         onClick={() => handleTagClick && handleTagClick(post.tag)}>
         #{post.tag}
       </p>
+      {session?.user.id === post?.creator?.id && pathName === "/profile" && (
+        <div>
+          <p
+            className="font-inter text-sm green_gradient cursor-pointer"
+            onClick={handleEdit}>
+            Edit
+          </p>
+          <p
+            className="font-inter text-sm orange_gradient cursor-pointer"
+            onClick={handleDelete}>
+            Delete
+          </p>
+        </div>
+      )}
     </div>
   );
 }

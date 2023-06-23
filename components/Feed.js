@@ -2,22 +2,19 @@
 
 import React, { useState, useEffect } from "react";
 import PromptCard from "./PromptCard";
-import { useSession } from "next-auth/react";
 
 function Feed() {
   const [searchText, setSearchText] = useState("");
   const [posts, setPosts] = useState([]);
-  const { data: session } = useSession();
 
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);
   };
 
   const fetchPosts = async () => {
-    const res = await fetch(`/api/users/${session?.user.id}/posts`);
+    const res = await fetch(`/api/prompt`);
     const data = await res.json();
     setPosts(data);
-    console.log(data);
   };
 
   useEffect(() => {
